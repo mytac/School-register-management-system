@@ -1,0 +1,44 @@
+mongodb
+老师
+    老师个人信息表/000
+    [
+     {tid:'011',name:'赵四',birth:'1990-01-01',department:'计算机学院',hometown:'河北'},
+     {tid:'012',name:'赵四',birth:'1990-01-01',department:'计算机学院',hometown:'河北'},
+     {tid:'013',name:'赵四',birth:'1990-01-01',department:'计算机学院',hometown:'河北'}
+    ]
+    老师授课信息表/001
+    [
+        {teacherID:'',[
+                    {subject：'教授科目',classesid:[教授班级]}
+                    {subject：'教授科目',classesid:[教授班级]}
+                    ]
+        }
+    ]
+
+学生
+    学生成绩表/002
+    [
+        {studengtID:'',name:'',scores:[
+                                       {subject：'所学科目',score:成绩}，
+                                       {subject：'所学科目',score:成绩}
+                                       ]
+            }
+    ]
+    学生绩点表/003
+    [
+    {studentID:'',gpa:null,rapid:null}
+    ]
+    学生信息表/004
+    [
+    {sid:'',name:'',sex:0,identify:'',birth:'',hometown:''department:'学院',major:'专业',sclass:'班级'}
+    ]
+管理员
+    课程信息表/005
+    [
+    {courseid:'课程id',coursename:'编译原理',must:1//必修1、选修0
+        teachers:[
+            {tid:'教师id',classids:[班级id]},
+            {tid:'004',classids:[班级id,1237]},
+        ]
+        }
+    ]
