@@ -3,13 +3,14 @@
     .legal-menu li{
         cursor:pointer
     }
-    .signing{background-color: #00B0E8;width: 50%;margin: auto; }
+    .signing{width: 50%;margin: auto; }
     input{width: 50%;}
 </style>
 <template>
     <div id="app">
         <div class="signing" v-show="!signState">
             <h1>登录</h1>
+
             <div class="form-group">
                 <label>id</label><input type="text" class="form-control" v-model="user.id" required>
                 <label>password</label><input type="password" class="form-control" v-model="user.psd" required>
@@ -52,7 +53,7 @@
             <ul>
                 <!--教师-->
                 <span v-if="type==1">
-                    <li v-link="{ path: '/teacherMng' }"><a  href="#" data-target=".dashboard-menu" class="nav-header" data-toggle="collapse">
+                    <li v-link="{ name: 'teacher_self_info', params: { teacherInfo: teacherInfo }}"><a  href="#" data-target=".dashboard-menu" class="nav-header" data-toggle="collapse">
                     <i class="fa fa-fw fa-dashboard"></i>自身信息管理</a></li>
                     <li v-link="{ path: '/tStudMng' }" data-popover="true" rel="popover" data-placement="right">
                     <a href="#" data-target=".premium-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-fighter-jet"></i>学生信息管理</a></li>
@@ -80,7 +81,6 @@
                 <h1 class="page-title">{{$route.name}}</h1>
                 <ul class="breadcrumb">
                     <li><a href="#">Home</a></li>
-                    <li>{{$route.path}}</li>
                 </ul>
 
             </div>
@@ -99,21 +99,39 @@
     </div>
 </template>
 <script>
+    import mainajax from '../request/mainajax.js'
+    //var $=require('jquery')
     export default {
         data () {
             return {
                 users:[],
-                signState:true,
+                signState:false,
                 user:{},
                 username:'',
-                type:0
+                type:null,
+                teacherInfo:[]
             }
         },
         methods: {
-            sigin(id,psd){
-                if(id&&psd) this.signState=true
-                this.username=id
-                this.type=1//教师1，学生2，管理员0
+            sigin(tid,tpsd){
+                var _self=this
+                if(tid&&tpsd){
+                    var arr=[{}]
+                    arr[0].id=tid
+                    arr[0].psd=tpsd
+                    mainajax.methods.getObj(arr,'register.php',function (data) {
+                        if(isNaN(data)){//type获取异常
+                            console.log('error\n'+data);
+                        }else{
+                            mainajax.methods.getObj(arr,'teacher/teacherSelfInfo.php',function(data){
+                                var temp=JSON.stringify(data)
+                                _self.teacherInfo.push(temp)
+                            })
+                            _self.signState=true
+                            _self.type=Number(data)
+                        }
+                    })
+                }
             }
         },
         components:{

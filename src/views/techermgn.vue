@@ -6,11 +6,11 @@
     <div>
         <div>
             <ul class="list-group">
-                <li class="list-group-item"><span>姓名：</span>{{teacher.name}}</li>
+                <li class="list-group-item"><span>姓名：</span>{{teacher.realname}}</li>
                 <li class="list-group-item"><span>性别：</span>{{teacher.sex}}</li>
                 <li class="list-group-item"><span>生日：</span>{{teacher.birth}}</li>
                 <li class="list-group-item"><span>所属部门：</span>{{teacher.branch}}</li>
-                <li class="list-group-item"><span>籍贯：</span>{{teacher.hometwon}}</li>
+                <li class="list-group-item"><span>籍贯：</span>{{teacher.hometown}}</li>
                 <li class="list-group-item"><span>学历：</span>{{teacher.education}}</li>
                 <li class="list-group-item"><span>政治面貌：</span>{{teacher.political}}</li>
             </ul>
@@ -28,11 +28,11 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>姓名</label><input class="form-control" type="text" v-model="teacher.name" disabled>
+                                <label>姓名</label><input class="form-control" type="text" v-model="teacher.realname" disabled>
                                 <label>性别</label><input class="form-control" type="text" v-model="teacher.sex" disabled>
                                 <label>生日</label><input class="form-control" type="text" v-model="teacher.birth" disabled>
                                 <label>所属部门</label><input class="form-control" type="text" v-model="teacher.branch" disabled>
-                                <label>籍贯</label><input class="form-control" type="text" v-model="teacher.hometwon" disabled>
+                                <label>籍贯</label><input class="form-control" type="text" v-model="teacher.hometown" disabled>
                                 <label>学历</label><input class="form-control" type="text" v-model="teacher.education" disabled>
                                 <label>政治面貌</label><input class="form-control" type="text" v-model="teacher.political" disabled>
                             </div>
@@ -49,12 +49,10 @@
 </template>
 
 <script>
-    //...请求拿到该教师的信息/000
-    var fakeTeacher={name:'张三',birth:'95-01-21',sex:'男',hometwon:'西藏',branch:'计算机学院',education:'博士',political:'党员'}
     export default{
         data(){
             return{
-                teacher:fakeTeacher
+                teacher:{}
             }
         },
         methods:{
@@ -66,6 +64,10 @@
                 //。。请求:保存修改后的数据/000
                 console.log(info)
             }
+        },
+        ready(){
+           this.teacher=JSON.parse(this.$route.params.teacherInfo)
+            //debugger
         }
     }
 </script>

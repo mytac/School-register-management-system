@@ -15,11 +15,12 @@ const routers = {
         },
         name:'学生信息管理'
     },
-    '/teacherMng':{
+    '/teacherMng/:teacherInfo':{
         component (resolve) {
             require(['./views/techermgn.vue'], resolve);
         },
-        name:'自身信息管理'
+        name:'teacher_self_info',
+
     },
     '/tScore':{
         component (resolve) {

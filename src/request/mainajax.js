@@ -5,19 +5,17 @@ time:17:03
 **/
 function mainajax(url,type,Obj,sucfunc){
     $.ajax({
-        url: 'http://192.168.1.119/11wdkj/'+url,
+        url: 'http://localhost:3000/'+url,
         type: type,
-        data : JSON.stringify(Obj),
-        dataType:'json',
-        contentType:"application/json",
+        data : 'data='+JSON.stringify(Obj),
+        //dataType:'String',
+        contentType:'application/json;charset="utf-8"',
         crossDomain:true,
-        async:false,
+        //async:false,
         success:sucfunc,
-        error:function () {
-            //alert("请求失败")
-        },
-        headers:{
-            'Access-Control-Allow-Origin':'http://localhost:8080'
+        error:function (e) {
+            console.log(e)
+            alert("请求失败")
         }
     })
 }
@@ -33,21 +31,16 @@ export default{
             ResultVo.pageSize = 10;
             mainajax(url,'POST',ResultVo,fuc)
         },
-        propertyQuery:function (property,index,url,fuc) {//用一个对象的属性查(e.g getid删除)
-            var obj={}
-            eval('obj.'+property+'='+index)
+        putObj:function (obj,url,fuc) {
             mainajax(url,'PUT',obj,fuc)
         },
-        reversePropertyQuery:function (id,property,value,url,fuc) {//根据id对属性进行更改
-            var obj={}
-            obj.id=id
-            eval('obj.'+property+'='+value)
-            mainajax(url,'PUT',obj,fuc)
+        postObj:function (obj,url,fuc) {
+            mainajax(url,'POST',obj,fuc)
         },
-        putObj:function (obj,url,fuc) {//直接传进一个对象
-            mainajax(url,'PUT',obj,fuc)
+        getObj:function (obj,url,fuc) {
+            mainajax(url,'GET',obj,fuc)
         },
-        postObj:function (obj,url,fuc) {//直接传进一个对象
+        test:function(url,obj,fuc){//测试
             mainajax(url,'POST',obj,fuc)
         }
     },
