@@ -9,7 +9,7 @@ function mainajax(url,type,Obj,sucfunc){
         type: type,
         data : 'data='+JSON.stringify(Obj),
         //dataType:'String',
-        contentType:'application/json;charset="utf-8"',
+        contentType:'application/json;charset=utf-8',
         crossDomain:true,
         //async:false,
         success:sucfunc,
@@ -39,9 +39,6 @@ export default{
         },
         getObj:function (obj,url,fuc) {
             mainajax(url,'GET',obj,fuc)
-        },
-        test:function(url,obj,fuc){//测试
-            mainajax(url,'POST',obj,fuc)
         }
     },
     components:{
