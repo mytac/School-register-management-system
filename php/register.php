@@ -18,6 +18,7 @@ function query($a,$b,$c){
     return $a!="*"? mysqli_fetch_row($res):mysqli_fetch_array($res);
 }
 
+
 $row=query("id","id",$get_id);
 if($row){
 $real_psd=query("psd","id",$get_id)[0];
