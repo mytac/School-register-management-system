@@ -55,7 +55,7 @@
                 <span v-if="type==1">
                     <li v-link="{ name: 'teacher_self_info', params: { teacherInfo: teacherInfo }}"><a  href="#" data-target=".dashboard-menu" class="nav-header" data-toggle="collapse">
                     <i class="fa fa-fw fa-dashboard"></i>自身信息管理</a></li>
-                    <li v-link="{ path: '/tStudMng' }" data-popover="true" rel="popover" data-placement="right">
+                    <li v-link="{ name: 'student_info_manage', params: { teacherInfo: teacherInfo }}" data-popover="true" rel="popover" data-placement="right">
                     <a href="#" data-target=".premium-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-fighter-jet"></i>学生信息管理</a></li>
                     <li v-link="{ path: '/tScore' }"><a  href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-briefcase"></i>学生成绩管理</a></li>
                 </span>

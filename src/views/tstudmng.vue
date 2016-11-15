@@ -24,9 +24,9 @@
                 <tbody>
                 <tr v-for="y in students" data-toggle="modal" data-target="#myModal" @click="showStudInfo($index)">
                     <td>{{y.name}}</td>
-                    <td>{{y.sid}}</td>
+                    <td>{{y.id}}</td>
                     <td>{{y.sex}}</td>
-                    <td>{{y.identify}}</td>
+                    <td>{{y.hometown}}</td>
                     <td>{{y.birth}}</td>
                 </tr>
                 </tbody>
@@ -38,29 +38,30 @@
     </div>
 </template>
 <script>
+    import mainajax from '../request/mainajax.js'
     import studInfoDetail from '../components/teacher/studInfo/studInfoModal.vue'
-    //。。。请求拿到教学的班级
-    var fakeClasses=['计算机1班','计算机2班','计算机3班','计算机4班']
 
     export default{
         data(){
             return{
                 studList:false,showD:false,
                 selected:'',
-                classes:fakeClasses,
+                classes:[],
                 students:[],stud_detail:{}
             }
         },
         methods:{
             showStud(selectedClass){
+                var _self=this
                 this.studList=true
-                //。。。请求拿到教学班级的学生004
-                var fakeStuds=[
-                    {sid:20135612,name:'张君卓',sex:'女',identify:'120104199501207666',birth:'1995-01-21',hometown:'西藏',department:'计算机学院',major:'计算机科学与技术',sclass:'1'},
-                    {sid:20135612,name:'张三',sex:'女',identify:'120104199501207666',birth:'1995-01-21',hometown:'西藏',department:'计算机学院',major:'计算机科学与技术',sclass:'1'},
-                    {sid:20135612,name:'李四',sex:'女',identify:'120104199501207666',birth:'1995-01-21',hometown:'西藏',department:'计算机学院',major:'网络工程',sclass:'2'},
-                ]
-                this.students=fakeStuds
+                //得到学生列表
+                var obj={}
+                obj.chose="studentClassList"
+                obj.class_id=selectedClass
+                mainajax.methods.getObj(obj,'teacher/studentInfo.php',function(data) {
+                    console.log(data)
+                    _self.students=data
+                })
             },
             showStudInfo(index){
                 this.stud_detail=this.students[index]
@@ -69,6 +70,17 @@
         },
         components:{
             'stdu-info-detail':studInfoDetail
-        }
+        },
+        ready(){
+        var _self=this
+        var teacher=JSON.parse(this.$route.params.teacherInfo)
+        teacher.chose="teacherInfo"
+        mainajax.methods.getObj(teacher,'teacher/studentInfo.php',function(data){
+            var str=data[0]
+            var arr=str.split(',')
+            _self.classes=arr
+        })
     }
+}
+ 
 </script>

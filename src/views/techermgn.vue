@@ -68,22 +68,17 @@ import mainajax from '../request/mainajax.js'
                 for(var i in info){
                    tempObj[i]='\''+info[i]+'\''
                 }
-                //console.log(tempObj)
                 $('input').attr('disabled',true)
-                //。。请求:保存修改后的数据/000
                 var arr=[]
                 arr.push(tempObj)
-                //console.log(arr[0].birth)
                 mainajax.methods.getObj(arr,'teacher/teacherInfoModify.php',function(data) {
                    console.log(data)
                 })
-                //console.log(info)
-            }/*,
-            trans(str){return '\''+str+'\''}*/
+                
+            }
         },
         ready(){
            this.teacher=JSON.parse(this.$route.params.teacherInfo)
-            //debugger
         }
     }
 </script>

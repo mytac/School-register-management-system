@@ -9,11 +9,11 @@ const routers = {
         name:'欢迎'
     },
     /*教师*/
-    '/tStudMng':{
+    '/tStudMng/:teacherInfo':{
         component (resolve) {
             require(['./views/tstudmng.vue'], resolve);
         },
-        name:'学生信息管理'
+        name:'student_info_manage'
     },
     '/teacherMng/:teacherInfo':{
         component (resolve) {

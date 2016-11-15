@@ -25,7 +25,7 @@
                             </div>
                             <div class="form-group">
                                 <label>学号</label>
-                                <input type="text" class="form-control" v-model="stud_detail.sid" disabled>
+                                <input type="text" class="form-control" v-model="stud_detail.id" disabled>
                             </div>
                             <div class="form-group">
                                 <label>生日</label>
@@ -41,11 +41,11 @@
                             </div>
                             <div class="form-group">
                                 <label>学院</label>
-                                <input type="text" class="form-control" v-model="stud_detail.department" disabled>
+                                <input type="text" class="form-control" v-model="stud_detail.branch_id" disabled>
                             </div>
                             <div class="form-group">
-                                <label>专业</label>
-                                <input type="text" class="form-control" value="{{stud_detail.major}}{{stud_detail.sclass}}班" disabled>
+                                <label>专业-班级</label>
+                                <input type="text" class="form-control" value="{{stud_detail.branch_id}}{{stud_detail.class_id}}班" disabled>
                             </div>
                             <div class="form-group">
                                 <label>籍贯</label>
