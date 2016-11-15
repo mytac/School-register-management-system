@@ -17,9 +17,7 @@ $properties=["realname","sex","birth","branch_id","hometown","political","educat
 $t=0;
 
 function modify($id,$a,$b){
-    //var_dump($b);
     $sql = "UPDATE teacherinfo SET $a = $b WHERE teacherinfo.id= $id";
-    debug_backtrace();
     $conn = mysqli_connect('localhost:3306', 'root', 'root','xueji');
     $res=mysqli_query($conn,$sql);
 }
