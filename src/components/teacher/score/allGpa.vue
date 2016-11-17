@@ -5,16 +5,16 @@
             <tr>
                 <th>姓名</th>
                 <th>学号</th>
-                <th>绩点</th>
-                <th>不及格率</th>
+                <th>各科平均分</th>
+                <th>班级</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="y in loopobj" @click="showDetail($index)"  data-toggle="modal" data-target="#myModal">
-                <td>{{y.name}}</td>
-                <td>{{y.sid}}</td>
-                <td>{{y.gpa}}</td>
-                <td>{{y.rapid}}%</td>
+            <tr v-for="y in scorelist" @click="showDetail($index)"  data-toggle="modal" data-target="#myModal">
+                <td>{{y.stud_name}}</td>
+                <td>{{y.stud_id}}</td>
+                <td>{{y.average}}</td>
+                <td>{{y.class_id}}班</td>
             </tr>
             </tbody>
         </table>
@@ -25,34 +25,68 @@
     tr{cursor: pointer}
 </style>
 <script>
+    import mainajax from '../../../request/mainajax.js'
     import gpaD from './gpaDetailModal.vue'
     export default{
         data(){
             return{
-                gpaD:false,studD:{},
-                loopobj:[
-                    {name:'张三',sid:'20135612',gpa:4.2,rapid:0.0},
-                    {name:'张三',sid:'20135614',gpa:4.2,rapid:0.0},
-                    {name:'张三',sid:'20135616',gpa:4.2,rapid:0.0}
-                ]
+                gpaD:false,studD:{},studAll:[]
             }
         },
         methods:{
             showDetail(index){
+                this.studD=this.studAll[index]
                 this.gpaD=true
-                var tsid=this.loopobj[index].sid//获取当前学生的学号
-                //.....请求学生的成绩单002
-                var fakeScoreList={
-                    name:'张三',sid:'20145155',scores:[
-                        {subject:'编译原理',score:88},
-                        {subject:'操作系统',score:90}
-                    ]
-                }
-                this.studD=fakeScoreList
             }
         },
         components:{
             'gpa-detail':gpaD
+        },
+        props:{
+            scorelist:{
+                type:Array,
+                twoWay:true
+            }
+        },
+        watch:{
+        },
+        ready(){
+            //处理数据
+        /*    var fakeScoreList={
+                name:'张三',sid:'20145155',scores:[
+                    {subject:'编译原理',score:88},
+                    {subject:'操作系统',score:90}
+                ]
+            }*/
+            var _self=this
+            function changeObj(obj){
+                var arr=[]
+                for(var i in obj){
+                    if(i.length>10){
+                        var tempobj={}
+                        tempobj.subject=i
+                        tempobj.score=obj[i]
+                        if(tempobj){arr.push(tempobj)}
+                        delete obj[i]
+                    }
+                }
+                obj.scores=arr
+                return obj
+            }
+
+            function deconstuct(arr){
+                arr.forEach(function(a){
+                    changeObj(a)
+                })
+                return arr
+            }
+
+            //main
+            this.$watch('scorelist', function(newVal, oldVal){
+                _self.studAll=deconstuct(newVal)
+            });
+
+
         }
     }
 </script>

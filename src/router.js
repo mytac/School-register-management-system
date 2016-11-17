@@ -22,11 +22,11 @@ const routers = {
         name:'teacher_self_info',
 
     },
-    '/tScore':{
+    '/tScore/:teacherInfo':{
         component (resolve) {
             require(['./views/tscore.vue'], resolve);
         },
-        name:'学生成绩管理'
+        name:'students_scores_manage'
     },
     /*学生*/
     '/Sinfo':{

@@ -57,7 +57,7 @@
                     <i class="fa fa-fw fa-dashboard"></i>自身信息管理</a></li>
                     <li v-link="{ name: 'student_info_manage', params: { teacherInfo: teacherInfo }}" data-popover="true" rel="popover" data-placement="right">
                     <a href="#" data-target=".premium-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-fighter-jet"></i>学生信息管理</a></li>
-                    <li v-link="{ path: '/tScore' }"><a  href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-briefcase"></i>学生成绩管理</a></li>
+                    <li v-link="{ name: 'students_scores_manage', params: { teacherInfo: teacherInfo }}"><a  href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-briefcase"></i>学生成绩管理</a></li>
                 </span>
                 <!--学生-->
                 <span v-if="type==2">

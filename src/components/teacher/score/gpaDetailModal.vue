@@ -9,7 +9,7 @@
                             &times;
                         </button>
                         <h4 class="modal-title" id="myModalLabel">
-                            {{stud_detail.name}}的成绩单({{stud_detail.sid}})
+                            {{stud_detail.stud_name}}的成绩单(学号:{{stud_detail.stud_id}})
                         </h4>
                     </div>
                     <div class="modal-body">
