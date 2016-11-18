@@ -13,13 +13,13 @@
                 <div>
                     <label for="ssubject">选择科目</label>
                     <select class="form-control"  v-model="selected" @change="showClasses(selected)" id="ssubject">
-                        <option v-for="s in subjects" >{{s.subject}}</option>
+                        <option v-for="s in teachsubjects" >{{s}}</option>
                     </select>
                 </div>
                 <div  v-if="classes">
                     <label for="ssclass">选择班级</label>
                     <select class="form-control"  v-model="selectClass" id="ssclass" @change="showScoreList(selected,selectClass)">
-                        <option v-for="c in sclasses" track-by="$index">{{c}}</option>
+                        <option v-for="c in sclasses" track-by="$index">{{c}}班</option>
                     </select>
                 </div>
             </div>
@@ -48,38 +48,23 @@
                     </tbody>
                 </table>
             </div>
-<!--        <table class="table table-hover">
-            <caption>学科成绩</caption>
-            <thead>
-            <tr>
-                <th>学号</th>
-                <th>姓名</th>
-                <th>成绩</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-
-            </tr>
-            </tbody>
-        </table>-->
     </div>
 </template>
 
 <script>
-    //请求该教师教授的科目和班级
-    var fakeSubject = [
-        {subject:'编译原理',classes:['计算机1班','计算机2班']},
-        {subject:'数据库',classes:['网工1班','网工2班']}
-    ]
-
+    import mainajax from '../../../request/mainajax.js'
     export default{
         data(){
             return{
                 classes:false,scorelist:false,
                 selectClass:'', selected:'',tempScore:null,
-                subjects:fakeSubject,
                 sclasses:[],slist:[]
+            }
+        },
+        props:{
+            teachsubjects:{
+                twoWay:true,
+                type:Array
             }
         },
         methods:{
@@ -94,23 +79,34 @@
                 else{node.attr("disabled",true)}
             },
             showClasses(selected){
-                var classes=[]
-                this.subjects.forEach(function (s) {
-                    if(s.subject==selected){classes=s.classes;}
+                var _self=this
+                var obj={}
+                obj.chose="showClass"
+                obj.subject_name=selected
+                mainajax.methods.getObj(obj,'teacher/studentInfo.php',function(data){
+                    var arr=data[0].split(',')
+                    _self.sclasses=arr
                 })
-                this.sclasses=classes
                 this.show('classes')
             },
             showScoreList(selectSubject,selectClass){
                 //请求学生的成绩表
-                   var fakeslist=[
+/*                   var fakeslist=[
                         {name:'张三',sid:'20135612',score:65},
                         {name:'lisi',sid:'20135612',score:65},
                         {name:'王五',sid:'20135612',score:65},
                         {name:'赵四',sid:'20135612',score:65}
-                    ]
-                this.slist=fakeslist
-                console.log(this.slist)
+                    ]*/
+                    var obj={}
+                    obj.subject_name=selectSubject
+                    obj.class_id=selectClass
+                    obj.chose="subjectScoreList"
+                    console.log(obj)
+                    mainajax.methods.getObj(obj,'teacher/studentInfo.php',function(data){
+                        console.log(data)
+                    })
+                //his.slist=fakeslist
+                //console.log(this.slist)
                 this.show('scorelist')
             },
             changeDisableSingle(index){
@@ -122,7 +118,7 @@
             },
             getTempScore(score){
                 this.tempScore=score
-                console.log('拿到的成绩'+this.tempScore)//拿到的成绩
+                //console.log('拿到的成绩'+this.tempScore)//拿到的成绩
             }
         },
         components:{

@@ -52,17 +52,11 @@
         },
         ready(){
             //处理数据
-        /*    var fakeScoreList={
-                name:'张三',sid:'20145155',scores:[
-                    {subject:'编译原理',score:88},
-                    {subject:'操作系统',score:90}
-                ]
-            }*/
             var _self=this
             function changeObj(obj){
                 var arr=[]
                 for(var i in obj){
-                    if(i.length>10){
+                    if(/^[\u4e00-\u9fa5]+$/i.test(i)){
                         var tempobj={}
                         tempobj.subject=i
                         tempobj.score=obj[i]

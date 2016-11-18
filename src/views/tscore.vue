@@ -8,7 +8,7 @@
             </div>
         </div>
         <all-gpa v-show="!add" :scorelist.sync="scoreList"></all-gpa>
-        <add-score v-if="add"></add-score>
+        <add-score  :teachsubjects.sync="subject" v-show="add"></add-score>
     </div>
 </template>
 <style scoped>
@@ -22,7 +22,7 @@ import allGpa from '../components/teacher/score/allGpa'
         data(){
             return{
                 add:false,back:false,
-                scoreList:[]
+                scoreList:[],subject:[]
 
             }
         },
@@ -31,7 +31,14 @@ import allGpa from '../components/teacher/score/allGpa'
             'all-gpa':allGpa
         },
         methods:{
-            showAdd(){this.add=true;this.back=true},
+            showAdd(){
+                this.add=true;this.back=true
+                var _self=this
+                var student=this.scoreList[0].scores//array
+                student.forEach(function(a){
+                    _self.subject.push(a.subject)
+                })
+            },
             goBack(){this.add=false;this.back=false}
         },
         ready(){//得到该教师所教班级下的学生的成绩单
@@ -61,7 +68,7 @@ import allGpa from '../components/teacher/score/allGpa'
                         var total=0
                         for(var i in student){
                             if(i.length==1){delete student[i]}
-                            else if(i.length>10){
+                            else if(/^[\u4e00-\u9fa5]+$/i.test(i)){
                                 arr.push(parseInt(student[i]))
                             }
                         }
@@ -71,9 +78,7 @@ import allGpa from '../components/teacher/score/allGpa'
                         if(student!=null){classArray.push(student)}
                     }
                 })
-
                 _self.scoreList=classArray
-
             })
         },true)
         }
