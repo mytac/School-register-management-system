@@ -31,6 +31,7 @@ function queryBasic($sql,$type,$isTable){
     $res=mysqli_query($conn,$sql);
     switch($type){
         case 0:return mysqli_fetch_row($res);break;//一个object
+        case 1:return mysqli_fetch_object($res);break;
         default:return loopQuery($res);break;//【{}，{}】
     }
 }
@@ -48,24 +49,16 @@ function queryScoreList($key){
 }
 function queryAverage($key){
     $sql="select * from score where class_id=$key";
-    return queryBasic($sql,10,'');
-/*    //选出来subjects字段
-    $sql="select COLUMN_NAME from information_schema.COLUMNS where table_name = 'score';";
-    $preArray=queryBasic($sql,2,true);
-    $length=count($preArray);
-    $subjectArray=array();
-    $backJson=array();
-    for($i=0; $i<$length; $i++){
-        $key=$preArray[$i][0];
-        if(strlen($key)>10){array_push($subjectArray,$key);}
-    }
-    foreach($subjectArray as $k){
-        $sql="SELECT $k FROM score where class_id=$key";
-        var_dump(queryBasic($sql,0,''));
-        //var_dump(queryBasic($sql,0,''));
-    }*/
-    /*array_push($backJson,$subjectArray);
-    var_dump($backJson);*/
+    return queryBasic($sql,2,'');
+
+}
+function queryShowClasses($key){
+    $sql="SELECT class_id from subject where subject_name='$key'";
+    return queryBasic($sql,0,'');
+}
+function querySubjectScoreList($key1,$key2){
+    $sql="SELECT stud_id from score where class_id=$key2";
+    return queryBasic($sql,2,'');
 }
 //main
 switch($d['chose']){
@@ -73,6 +66,8 @@ switch($d['chose']){
     case "studentClassList": $get_key=$d['class_id'];$back=queryStudentList($get_key);break;
     case "scores": $get_key=$d['class_id'];$back=queryScoreList($get_key);break;
     case "average": $get_key=$d['class_id'];$back=queryAverage($get_key);break;
+    case "showClass": $get_key=$d['subject_name'];$back=queryShowClasses($get_key);break;
+    case "subjectScoreList":$get_key1=$d['subject_name'];$get_key2=$d['class_id'];$back=querySubjectScoreList($get_key1,$get_key2);break;
     default: $back="wrong";break;
 }
 //ajax_back
