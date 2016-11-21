@@ -19,7 +19,7 @@
                 <div  v-if="classes">
                     <label for="ssclass">选择班级</label>
                     <select class="form-control"  v-model="selectClass" id="ssclass" @change="showScoreList(selected,selectClass)">
-                        <option v-for="c in sclasses" track-by="$index">{{c}}班</option>
+                        <option v-for="c in sclasses" track-by="$index">{{c}}</option>
                     </select>
                 </div>
             </div>
@@ -37,8 +37,8 @@
                     </thead>
                     <tbody >
                     <tr v-for="s in slist">
-                        <td>{{s.sid}}</td>
-                        <td>{{s.name}}</td>
+                        <td>{{s.stud_id}}</td>
+                        <td>{{s.stud_name}}</td>
                         <td><input type="text" v-model="s.score" disabled @change="getTempScore(s.score)"></td>
                         <td>
                             <button class="btn btn-sm btn-danger modify" @click="changeDisableSingle($index)">修改</button>
@@ -57,7 +57,7 @@
         data(){
             return{
                 classes:false,scorelist:false,
-                selectClass:'', selected:'',tempScore:null,
+                selectClass:'', selected:'',getScore:null,
                 sclasses:[],slist:[]
             }
         },
@@ -90,35 +90,47 @@
                 this.show('classes')
             },
             showScoreList(selectSubject,selectClass){
-                //请求学生的成绩表
-/*                   var fakeslist=[
-                        {name:'张三',sid:'20135612',score:65},
-                        {name:'lisi',sid:'20135612',score:65},
-                        {name:'王五',sid:'20135612',score:65},
-                        {name:'赵四',sid:'20135612',score:65}
-                    ]*/
+                    var _self=this
                     var obj={}
                     obj.subject_name=selectSubject
                     obj.class_id=selectClass
                     obj.chose="subjectScoreList"
-                    console.log(obj)
                     mainajax.methods.getObj(obj,'teacher/studentInfo.php',function(data){
-                        console.log(data)
+
+                        data.forEach(function(obj){
+                            for(var i in obj){
+                                if(i.isNaN){delete obj[i]}
+
+                                else if(/^[\u4e00-\u9fa5]+$/i.test(i)){
+                                    obj.score=obj[i]
+                                }
+                            }
+                        })
+                        _self.slist=data
                     })
-                //his.slist=fakeslist
-                //console.log(this.slist)
                 this.show('scorelist')
             },
             changeDisableSingle(index){
                 this.toggled('.modify','.compelete',index,false)
             },
             compeleteSingle(index){
+                var _self=this
+                var obj={}
+                obj.chose="scoreModify"
+                obj.score=_self.getScore
+                obj.subject=_self.selected
+                obj.studId=_self.slist[index].stud_id
+                if(_self.getScore){
+                    mainajax.methods.getObj(obj,'teacher/studentInfo.php',function(data){
+                   alert(data)
+                   _self.getScore=null
+                })
+                }
                 this.toggled('.compelete','.modify',index,true)
-                //。。。。。请求：修改数据--修改后的成绩为this.tempScore
             },
             getTempScore(score){
-                this.tempScore=score
-                //console.log('拿到的成绩'+this.tempScore)//拿到的成绩
+                this.getScore=score
+                console.log('拿到的成绩'+this.getScore)//拿到的成绩
             }
         },
         components:{
