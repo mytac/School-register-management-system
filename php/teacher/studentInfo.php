@@ -57,8 +57,17 @@ function queryShowClasses($key){
     return queryBasic($sql,0,'');
 }
 function querySubjectScoreList($key1,$key2){
-    $sql="SELECT stud_id from score where class_id=$key2";
+    $sql="SELECT stud_id,stud_name,$key1 from score where class_id=$key2";
     return queryBasic($sql,2,'');
+}
+function updateScore($score,$subject,$stud_id){
+    $sql="Update score SET $subject=$score WHERE  stud_id=$stud_id";
+    $conn = mysqli_connect('localhost:3306', 'root', 'root','xueji');
+    $res=mysqli_query($conn,$sql);
+    if(mysqli_affected_rows($conn))
+       return  "success";
+    else
+        return "success";
 }
 //main
 switch($d['chose']){
@@ -67,7 +76,8 @@ switch($d['chose']){
     case "scores": $get_key=$d['class_id'];$back=queryScoreList($get_key);break;
     case "average": $get_key=$d['class_id'];$back=queryAverage($get_key);break;
     case "showClass": $get_key=$d['subject_name'];$back=queryShowClasses($get_key);break;
-    case "subjectScoreList":$get_key1=$d['subject_name'];$get_key2=$d['class_id'];$back=querySubjectScoreList($get_key1,$get_key2);break;
+    case "subjectScoreList":$get_subject=$d['subject_name'];$get_classId=$d['class_id'];$back=querySubjectScoreList($get_subject,$get_classId);break;
+    case "scoreModify": $get_score=$d['score'];$get_subject=$d['subject'];$get_studId=$d['studId'];$back=updateScore($get_score,$get_subject,$get_studId);break;
     default: $back="wrong";break;
 }
 //ajax_back
