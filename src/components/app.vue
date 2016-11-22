@@ -61,8 +61,8 @@
                 </span>
                 <!--学生-->
                 <span v-if="type==2">
-                    <li><a v-link="{ path: '/Sinfo' }" href="#" class="nav-header"><i class="fa fa-fw fa-question-circle"></i>教师信息查看</a></li>
-                    <li><a v-link="{ path: '/Sscore' }" href="#" class="nav-header"><i class="fa fa-fw fa-question-circle"></i>查看成绩</a></li>
+                    <li><a v-link="{ name: 'students_basic_info', params: { teacherInfo: teacherInfo }}" href="#" class="nav-header"><i class="fa fa-fw fa-question-circle"></i>查看我的基本信息</a></li>
+                    <li><a v-link="{ path: '/Sscore' }" href="#" class="nav-header"><i class="fa fa-fw fa-question-circle"></i>查看我的成绩</a></li>
                 </span>
                 <!--管理员-->
                 <span v-if="type==0">
@@ -115,20 +115,34 @@
         methods: {
             sigin(tid,tpsd){
                 var _self=this
+                function typeBasic(url,chose,tid){
+                var obj={}
+                obj.chose=chose
+                obj.id=tid
+                 mainajax.methods.getObj(obj,url,function(data){
+                      var temp=JSON.stringify(data)
+                        _self.teacherInfo.push(temp)
+                        })
+                 }
+
                 if(tid&&tpsd){
-                    var arr=[{}]
-                    arr[0].id=tid
-                    arr[0].psd=tpsd
-                    mainajax.methods.getObj(arr,'register.php',function (data) {
-                        if(isNaN(data)){//type获取异常
+                    var obj={}
+                    obj.id=tid
+                    obj.psd=tpsd
+                    mainajax.methods.getObj(obj,'register.php',function (data) {
+                        if(typeof(data)=="string"){//type获取异常
                             console.log('error\n'+data);
                         }else{
-                            mainajax.methods.getObj(arr,'teacher/teacherSelfInfo.php',function(data){
-                                var temp=JSON.stringify(data)
-                                _self.teacherInfo.push(temp)
-                            })
+                            ///请求基础
+                            switch(data.type){
+                                case '1': typeBasic('teacher/teacherSelfInfo.php','',data.id);break;
+                                case '2': typeBasic('student/studentInfo.php','teacherInfo',data.id);break;
+                                case '3': typeBasic('admin/adminInfo.php');break;
+                                default:alert('没这个type');
+                            }
+
                             _self.signState=true
-                            _self.type=Number(data)
+                            _self.type=Number(data.type)
                         }
                     })
                 }
