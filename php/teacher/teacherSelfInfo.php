@@ -13,7 +13,7 @@ header('Content-Type:application/json;charset=utf-8');
 
 //ajax_in
 $d=json_decode($_GET["data"],true);
-$get_id=$d[0]['id'];
+$get_id=$d['id'];
 //db
 function query($a){
     $sql="SELECT * FROM teacherinfo WHERE id=$a";
