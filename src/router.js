@@ -29,11 +29,11 @@ const routers = {
         name:'students_scores_manage'
     },
     /*学生*/
-    '/Sinfo':{
+    '/Sinfo/:teacherInfo':{
         component (resolve) {
             require(['./views/sinfo.vue'], resolve);
         },
-        name:'学生信息管理'
+        name:'students_basic_info'
     },
     '/Sscore':{
         component (resolve) {
