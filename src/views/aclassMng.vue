@@ -15,10 +15,10 @@ tr{cursor:pointer;}
             </thead>
             <tbody>
             <tr v-for="c in classes">
-                <td>{{c.name}}</td>
+                <td>{{c.subject_name}}</td>
                 <td>{{c.degree}}</td>
                 <td>
-                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal">删除</button>
+                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" @click="deleteIt($index)">删除</button>
                     <button class="btn btn-sm btn-warning" @click="modify($index)" data-toggle="modal" data-target="#editModal">修改</button>
                 </td>
             </tr>
@@ -36,7 +36,7 @@ tr{cursor:pointer;}
                         <div class="form-group">
                             <label  class="col-sm-2 control-label">编辑名称</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control"v-model="selectClass.name">
+                                <input type="text" class="form-control"v-model="selectClass.subject_name">
                             </div>
                         </div>
                         <div class="form-group">
@@ -48,7 +48,7 @@ tr{cursor:pointer;}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary" @click="save">提交更改</button>
+                        <button type="button" class="btn btn-primary" @click="modify(-1)">提交更改</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
@@ -64,14 +64,14 @@ tr{cursor:pointer;}
                     </div>
                     <div class="modal-body">确定删除此课程吗</div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger"  @click="delete">删除</button>
+                        <button type="button" class="btn btn-danger"  @click="deleteIt(-1)">删除</button>
                         <button type="button" class="btn btn-success" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
             </div>
             </div>
         </div>
 
-        <!-- 模态框（Modal） -->
+        <!-- 增加 -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -85,8 +85,7 @@ tr{cursor:pointer;}
                         <label>输入课程名称</label><input type="text" class="form-control" v-model="newClassName">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-if="!passed" @click="check">提交更改</button>
-                        <button type="button" class="btn btn-success" class="btn btn-default" data-dismiss="modal" v-if="passed">完成</button>
+                        <button type="button" class="btn btn-primary" @click="check">提交更改</button>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal -->
             </div>
@@ -100,9 +99,9 @@ import mainajax from '../request/mainajax.js'
     export default{
         data(){
             return {
-                newClassName:'',passed:false,isSelectClass:false,
+                newClassName:'',isSelectClass:false,
                 selectClass:{},
-                classes:[{name:'编译原理',degree:4}]
+                classes:[],index:null
             }
         },
         components:{
@@ -110,21 +109,58 @@ import mainajax from '../request/mainajax.js'
         },
         methods:{
             check(){
-                var className=this.newClassName
-                //请求：检测是否重命名，是则通过
-                this.passed=true
+                var _self=this
+                var obj={}
+                obj.chose="checkName"
+                obj.className=this.newClassName
+                mainajax.methods.getObj(obj,'admin/admin.php',function(data){
+                    console.log(data)
+                    if(data){_self.passed=true}
+                })
+            },
+            deleteIt(index){
+                var _self=this
+                if(index>-1){
+                    _self.index=index
+                }else{
+                    var obj={}
+                    obj.chose="deleteSubject"
+                    obj.subject_name=_self.classes[_self.index].subject_name
+                    mainajax.methods.getObj(obj,'admin/admin.php',function(data){
+                        alert("删除!")
+                    })
+                }
+                console.log(this.index)
             },
             modify(index){//修改课程信息
-                this.selectClass=this.classes[index]
-                this.isSelectClass=true
-
+                var _self=this
+                if(index>-1){
+                   _self.selectClass=_self.classes[index]
+                   _self.isSelectClass=true
+                   _self.index=index
+                }else{
+                    var obj={}
+                    obj.chose="modifySubject"
+                    obj.subject_id=_self.classes[_self.index].subject_id
+                    obj.subject_name=_self.selectClass.subject_name
+                    obj.degree=_self.selectClass.degree
+                    console.log(obj)
+                    mainajax.methods.getObj(obj,'admin/admin.php',function(data){
+                    console.log(data)
+                })
+                }
             },
             save(){
                 //请求：存入数据
             }
         },
         ready(){
-
+            var _self=this
+            var obj={}
+            obj.chose="subjects"
+            mainajax.methods.getObj(obj,'admin/admin.php',function(data){
+                _self.classes=data
+            })
         }
     }
 </script>
