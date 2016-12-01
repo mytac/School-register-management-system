@@ -11,11 +11,12 @@
             </select>
         </div>
         </form>
-        <info-list :branch="branch" :teacherlists="teacherlists" v-if="list"></info-list>
+        <info-list :branch.sync="branch" :teacherlists.sync="teacherlists" v-if="list"></info-list>
     </div>
 </template>
 
 <script>
+    import mainajax from '../request/mainajax'
     import infoList from '../components/admin/teacherInfo/infoList.vue'
 
     export default{
@@ -23,25 +24,37 @@
             return {
                 list:false,
                 branch:'',
-                branches:['计算机学院','自动化学院','材料','管理学院'],
+                branches:[],
                 teacherlists:[]
             }
         },
         methods:{
             showList(list){
                 //..请求拿到该学院下的教师/000
-                var faketeacherlists=[
-                    {tid:'011',name:'赵四',birth:'1990-01-01',department:'计算机学院',hometown:'河北'},
-                    {tid:'012',name:'赵四',birth:'1990-01-01',department:'计算机学院',hometown:'河北'},
-                    {tid:'013',name:'赵四',birth:'1990-01-01',department:'计算机学院',hometown:'河北'}
-
-                ]
-                this.teacherlists=faketeacherlists
-                this.list=true
+                var _self=this
+                var obj={}
+                obj.chose="teachers"
+                obj.branch=list
+                mainajax.methods.getObj(obj,'admin/admin.php',function(data){
+                    console.log(data)
+                   _self.teacherlists=data
+                   _self.list=true
+                })
             }
         },
         components:{
         'info-list':infoList
+        },
+        ready(){
+            var _self=this
+            var obj={}
+            obj.chose="branch"
+            mainajax.methods.getObj(obj,'admin/admin.php',function(data){
+                data.forEach(function(a){
+                     _self.branches.push(a.name)
+                })
+               
+            })
         }
     }
 </script>

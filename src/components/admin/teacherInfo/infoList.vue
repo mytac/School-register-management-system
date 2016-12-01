@@ -11,16 +11,16 @@
                 <th>姓名</th>
                 <th>生日</th>
                 <th>籍贯</th>
-                <th>所属部门</th>
+                <th>政治面貌</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="t in teacherlists">
-                <td>{{t.tid}}</td>
-                <td>{{t.name}}</td>
+                <td>{{t.id}}</td>
+                <td>{{t.realname}}</td>
                 <td>{{t.birth}}</td>
                 <td>{{t.hometown}}</td>
-                <td>{{t.department}}</td>
+                <td>{{t.political}}</td>
             </tr>
             </tbody>
         </table>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import mainajax from '../../../request/mainajax.js'
 
     export default{
         data(){
@@ -36,8 +37,17 @@
             }
         },
         props:{
-            branch:{type:String},
-            teacherlists:{type:Array}
+            branch:{
+                type:String,
+                twoWay:true
+            },
+            teacherlists:{
+                type:Array,
+                twoWay:true
+            }
+        },
+        ready(){
+
         }
     }
 </script>

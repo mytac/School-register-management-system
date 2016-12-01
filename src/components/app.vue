@@ -94,7 +94,7 @@
         <footer style="float:top">
             <hr>
             <p class="pull-right">Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">coolzjz</a></p>
-            <p>© 2016<a href="#" target="_blank">张君卓</a></p>
+            <p>© 2016<a href="http://www.coolzjz.website" target="_blank">张君卓</a></p>
         </footer>
     </div>
 </template>
@@ -137,7 +137,7 @@
                             switch(data.type){
                                 case '1': typeBasic('teacher/teacherSelfInfo.php','',data.id);break;
                                 case '2': typeBasic('student/studentInfo.php','teacherInfo',data.id);break;
-                                case '3': typeBasic('admin/adminInfo.php');break;
+                                case '0': alert('管理员身份登录');break;
                                 default:alert('没这个type');
                             }
 
